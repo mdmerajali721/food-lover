@@ -5,6 +5,7 @@ import {
   AiFillHeart,
   AiOutlineClockCircle,
 } from "react-icons/ai";
+import { FaUser } from "react-icons/fa";
 import { MdLocationOn } from "react-icons/md";
 import Modal from "./Modal";
 import { useAuth } from "../context/AuthContext";
@@ -70,7 +71,7 @@ const ReviewCard = ({ review }) => {
 
           {review.userName && (
             <p className="text-gray-700 mt-1 text-sm sm:text-base flex items-center gap-1">
-              <AiOutlineClockCircle /> By {review.userName}
+              <FaUser size='12' /> By {review.userName}
             </p>
           )}
 

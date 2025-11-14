@@ -11,7 +11,7 @@ const Modal = ({ children, onClose }) => {
       ></div>
 
       {/* Modal Content */}
-      <div className="relative bg-white rounded-lg shadow-lg max-w-lg w-full z-10 p-4">
+      <div className="relative bg-white rounded-lg shadow-lg max-w-md w-full z-10 p-4">
         {/* Close Button */}
         <button
           className="absolute top-2 right-2 text-gray-700 hover:text-gray-900 text-2xl"
