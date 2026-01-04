@@ -3,17 +3,21 @@ import { Link } from "react-router";
 import "animate.css";
 
 // Images
-import pastaImg from "../assets/pasta.jpg";
-import chickenImg from "../assets/chicken.jpg";
-import tortillaImg from "../assets/tortilla.jpg";
+import pastaImg from "../../assets/pasta.jpg";
+import chickenImg from "../../assets/chicken.jpg";
+import tortillaImg from "../../assets/tortilla.jpg";
 
-const heroStyle = "absolute inset-0 rounded-2xl bg-gradient-to-b from-black/50 via-black/20 to-black/50"
+const heroOverlay =
+  "absolute inset-0 rounded bg-gradient-to-b from-black/50 via-black/20 to-black/50";
+const buttonStyle =
+  "px-6 py-2 rounded bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-lg hover:from-green-600 hover:to-emerald-500 transition transform animate__animated animate__fadeInUp";  
 
 const slides = [
   {
     id: 1,
     title: "Discover Local Flavors",
-    subtitle: "Explore street foods, home-cooked meals & top restaurants near you",
+    subtitle:
+      "Explore street foods, home-cooked meals & top restaurants near you",
     image: pastaImg,
     buttonText: "Explore Reviews",
     buttonLink: "/allReviews",
@@ -21,7 +25,8 @@ const slides = [
   {
     id: 2,
     title: "Share Your Food Experience",
-    subtitle: "Post reviews, photos, and let the community know your favorite dishes",
+    subtitle:
+      "Post reviews, photos, and let the community know your favorite dishes",
     image: chickenImg,
     buttonText: "Add Review",
     buttonLink: "/add-review",
@@ -29,7 +34,8 @@ const slides = [
   {
     id: 3,
     title: "Find Top-Rated Foods",
-    subtitle: "Check out what others love and discover new favorites around you",
+    subtitle:
+      "Check out what others love and discover new favorites around you",
     image: tortillaImg,
     buttonText: "View All",
     buttonLink: "/allReviews",
@@ -45,13 +51,14 @@ const HeroSlider = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 3000);
+    }, 4000);
     return () => clearInterval(interval);
   }, []);
 
   const goToSlide = (index) => setCurrentSlide(index);
 
-  const handleTouchStart = (e) => (touchStartX.current = e.changedTouches[0].screenX);
+  const handleTouchStart = (e) =>
+    (touchStartX.current = e.changedTouches[0].screenX);
   const handleTouchEnd = (e) => {
     touchEndX.current = e.changedTouches[0].screenX;
     if (touchStartX.current - touchEndX.current > 50) {
@@ -77,27 +84,24 @@ const HeroSlider = () => {
             index === currentSlide ? "opacity-100 z-20" : "opacity-0 z-10"
           }`}
         >
-          {/* Background */}
+          {/* Background Image */}
           <div
-            className="w-full h-full rounded-2xl bg-center bg-cover brightness-75"
+            className="w-full h-full bg-center bg-cover brightness-75"
             style={{ backgroundImage: `url(${slide.image})` }}
           ></div>
 
-          {/* Gradient */}
-          <div className={heroStyle}></div>
+          {/* Overlay */}
+          <div className={heroOverlay}></div>
 
-          {/* Text Overlay */}
-          <div className="absolute inset-0 flex flex-col justify-center items-center px-6 sm:px-12 md:px-16 lg:px-32 text-white">
-            <h1 className="text-2xl font-bold mb-4 animate__animated animate__fadeInDown">
+          {/* Text */}
+          <div className="absolute inset-0 flex flex-col justify-center items-center px-6 sm:px-12 md:px-16 lg:px-32 text-white text-center">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 animate__animated animate__fadeInDown">
               {slide.title}
             </h1>
-            <p className="text-center mb-4 animate__animated animate__fadeInUp">
+            <p className="text-sm sm:text-base md:text-lg mb-4 animate__animated animate__fadeInUp">
               {slide.subtitle}
             </p>
-            <Link
-              to={slide.buttonLink}
-              className="px-5 py-2 bg-green-600 text-white rounded-lg shadow-lg hover:bg-green-700 transition-all transform hover:scale-105 animate__animated animate__fadeInUp"
-            >
+            <Link to={slide.buttonLink} className={buttonStyle}>
               {slide.buttonText}
             </Link>
           </div>
@@ -110,31 +114,15 @@ const HeroSlider = () => {
           <button
             key={idx}
             onClick={() => goToSlide(idx)}
-            className={`w-3 h-3 sm:w-4 sm:h-4 rounded-full transition-all duration-300 ${
-              idx === currentSlide ? "bg-green-600 scale-125" : "bg-white/50 hover:bg-white"
+            className={`w-3 h-3 rounded-full transition-all duration-300 ${
+              idx === currentSlide
+                ? "bg-green-600 scale-125"
+                : "bg-white/50 hover:bg-white"
             }`}
             aria-label={`Go to slide ${idx + 1}`}
           />
         ))}
       </div>
-
-      {/* Prev/Next Buttons */}
-      <button
-        onClick={() =>
-          setCurrentSlide((currentSlide - 1 + slides.length) % slides.length)
-        }
-        className="absolute top-1/2 left-3 sm:left-5 transform -translate-y-1/2 text-white text-2xl sm:text-3xl md:text-4xl bg-black/30 hover:bg-black/50 p-2 sm:p-3 rounded-full transition z-30"
-        aria-label="Previous Slide"
-      >
-        &#10094;
-      </button>
-      <button
-        onClick={() => setCurrentSlide((currentSlide + 1) % slides.length)}
-        className="absolute top-1/2 right-3 sm:right-5 transform -translate-y-1/2 text-white text-2xl sm:text-3xl md:text-4xl bg-black/30 hover:bg-black/50 p-2 sm:p-3 rounded-full transition z-30"
-        aria-label="Next Slide"
-      >
-        &#10095;
-      </button>
     </section>
   );
 };

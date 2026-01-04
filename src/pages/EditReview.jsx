@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { toast } from "react-hot-toast";
-import Loader from "../components/Loader";
 import { useAuth } from "../context/AuthContext";
+import Loader from "../components/Loader/Loader";
 
 const EditReview = () => {
   const { id } = useParams();
@@ -19,21 +19,22 @@ const EditReview = () => {
     rating: "",
   });
 
-  // Fetch review by ID and autofill form
+  // Fetch review data
   useEffect(() => {
     if (!user) {
-      toast.error("Please log in to edit your review!");
+      toast.error("Please log in first!");
       navigate("/login");
       return;
     }
 
     const fetchReview = async () => {
       try {
-        const res = await fetch(`${import.meta.env.VITE_API_URL}/reviews/${id}`);
+        const res = await fetch(
+          `${import.meta.env.VITE_API_URL}/reviews/${id}`
+        );
         if (!res.ok) throw new Error("Failed to fetch review");
         const data = await res.json();
 
-        // Autofill all fields with fetched data
         setFormData({
           foodName: data.foodName || "",
           restaurantName: data.restaurantName || "",
@@ -44,7 +45,7 @@ const EditReview = () => {
         });
       } catch (err) {
         console.error(err);
-        toast.error("Failed to load review data!");
+        toast.error("Failed to load review!");
       } finally {
         setLoading(false);
       }
@@ -53,20 +54,20 @@ const EditReview = () => {
     fetchReview();
   }, [id, user, navigate]);
 
-  // Handle input changes
+  // Handle change
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Handle form submit
+  // Submit update
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const { foodName, restaurantName, reviewText, rating } = formData;
 
     if (!foodName || !restaurantName || !reviewText || !rating) {
-      toast.error("Please fill in all required fields!");
+      toast.error("Please fill all required fields!");
       return;
     }
 
@@ -77,30 +78,41 @@ const EditReview = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...formData,
-          rating: Number(formData.rating),
+          rating: Number(rating),
           updatedAt: new Date().toISOString(),
         }),
       });
 
-      if (!res.ok) throw new Error("Failed to update review");
+      if (!res.ok) throw new Error("Update failed");
 
       toast.success("Review updated successfully!");
       navigate("/my-reviews");
-    } catch (error) {
-      console.error(error);
-      toast.error("Error updating review!");
+    } catch (err) {
+      console.error(err);
+      toast.error("Something went wrong!");
     } finally {
       setLoading(false);
     }
   };
 
-  if (loading) return <Loader />;
+  // Full page loader
+  if (loading)
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+        <Loader />
+      </div>
+    );
+
+  // Styles (same as AddReview)
+  const textStyle =
+    "text-3xl font-bold mb-6 text-center max-w-xs mx-auto border-b-2 border-green-500 bg-gradient-to-r from-green-500 to-emerald-600 bg-clip-text text-transparent";
+
+  const buttonStyle =
+    "w-full py-3 rounded font-bold text-white bg-gradient-to-r from-green-500 to-emerald-600 hover:from-emerald-600 hover:to-green-500 shadow-md transition-all duration-300";
 
   return (
-    <div className="max-w-2xl mx-auto p-6 mt-20 bg-white shadow-md rounded-md">
-      <h2 className="text-3xl font-bold text-center mb-6 text-green-600">
-        Edit Review
-      </h2>
+    <div className="max-w-2xl mx-auto p-8 mt-10 bg-base-200 shadow-2xl rounded">
+      <h2 className={textStyle}>Edit Review</h2>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Food Name */}
@@ -113,7 +125,7 @@ const EditReview = () => {
             name="foodName"
             value={formData.foodName}
             onChange={handleChange}
-            className="w-full bg-gray-50 border border-gray-200 rounded-md px-3 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-green-600"
+            className="w-full bg-base-100 border border-gray-200 rounded-md px-3 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-green-600"
             required
           />
         </div>
@@ -128,12 +140,12 @@ const EditReview = () => {
             name="restaurantName"
             value={formData.restaurantName}
             onChange={handleChange}
-            className="w-full bg-gray-50 border border-gray-200 rounded-md px-3 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-green-600"
+            className="w-full bg-base-100 border border-gray-200 rounded-md px-3 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-green-600"
             required
           />
         </div>
 
-        {/* Restaurant Location */}
+        {/* Location */}
         <div>
           <label className="block text-gray-700 mb-1 font-medium">
             Restaurant Location
@@ -143,12 +155,12 @@ const EditReview = () => {
             name="restaurantLocation"
             value={formData.restaurantLocation}
             onChange={handleChange}
-            className="w-full bg-gray-50 border border-gray-200 rounded-md px-3 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-green-600"
             placeholder="Enter restaurant location"
+            className="w-full bg-base-100 border border-gray-200 rounded-md px-3 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-green-600"
           />
         </div>
 
-        {/* Food Image */}
+        {/* Image */}
         <div>
           <label className="block text-gray-700 mb-1 font-medium">
             Food Image URL
@@ -158,8 +170,8 @@ const EditReview = () => {
             name="foodImage"
             value={formData.foodImage}
             onChange={handleChange}
-            className="w-full bg-gray-50 border border-gray-200 rounded-md px-3 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-green-600"
             placeholder="Paste image URL"
+            className="w-full bg-base-100 border border-gray-200 rounded-md px-3 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-green-600"
           />
         </div>
 
@@ -173,9 +185,9 @@ const EditReview = () => {
             value={formData.reviewText}
             onChange={handleChange}
             rows="4"
-            className="w-full bg-gray-50 border border-gray-200 rounded-md px-3 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-green-600"
+            className="w-full bg-base-100 border border-gray-200 rounded-md px-3 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-green-600"
             required
-          ></textarea>
+          />
         </div>
 
         {/* Rating */}
@@ -185,7 +197,7 @@ const EditReview = () => {
             name="rating"
             value={formData.rating}
             onChange={handleChange}
-            className="w-full bg-gray-50 border border-gray-200 rounded-md px-3 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-green-600"
+            className="w-full bg-base-100 border border-gray-200 rounded-md px-3 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-green-600"
             required
           >
             <option value="">Select rating</option>
@@ -198,18 +210,16 @@ const EditReview = () => {
         </div>
 
         {/* Buttons */}
-        <div className="flex justify-between mt-6">
+        <div className="flex gap-4 pt-2">
           <button
             type="button"
             onClick={() => navigate("/my-reviews")}
-            className="px-4 py-2 bg-gray-400 text-white rounded hover:bg-gray-500"
+            className="w-full py-3 rounded font-bold bg-gray-300 text-gray-700 hover:bg-gray-400 transition"
           >
             Cancel
           </button>
-          <button
-            type="submit"
-            className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
-          >
+
+          <button type="submit" className={buttonStyle}>
             Update Review
           </button>
         </div>

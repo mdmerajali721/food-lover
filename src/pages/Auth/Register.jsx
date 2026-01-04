@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 import toast from "react-hot-toast";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
@@ -69,13 +69,16 @@ const Register = () => {
     }
   };
 
+  const buttonStyle =
+    "mt-auto w-full py-3 cursor-pointer rounded font-bold text-white bg-gradient-to-r from-green-500 to-emerald-600 hover:from-emerald-600 hover:to-green-500 shadow-md transition-all duration-300 flex justify-center items-center gap-2";
+  const textStyle =
+    "text-3xl font-bold mb-6 text-center max-w-xs mx-auto border-b-2 border-green-500 bg-gradient-to-r from-green-500 to-emerald-600 bg-clip-text text-transparent";      
+
   return (
     <div className="flex justify-center items-start px-4 py-10">
       <title>Register - Food Lovers</title>
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8 border border-gray-100">
-        <h1 className="text-3xl font-bold text-center text-green-600 mb-6">
-          Register
-        </h1>
+      <div className="w-full max-w-md bg-base-100 rounded shadow-lg p-8">
+        <h1 className={textStyle}>Register to Food Lovers</h1>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           {/* Name */}
@@ -85,7 +88,7 @@ const Register = () => {
             value={form.name}
             onChange={handleChange}
             placeholder="Full Name"
-            className="w-full bg-gray-50 border border-gray-200 rounded-md px-3 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-green-600"
+            className="w-full bg-base-100 border border-gray-200 rounded-md px-3 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-green-600"
             required
           />
 
@@ -96,7 +99,7 @@ const Register = () => {
             value={form.email}
             onChange={handleChange}
             placeholder="Email Address"
-            className="w-full bg-gray-50 border border-gray-200 rounded-md px-3 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-green-600"
+            className="w-full bg-base-100 border border-gray-200 rounded-md px-3 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-green-600"
             required
           />
 
@@ -107,7 +110,7 @@ const Register = () => {
             value={form.photoURL}
             onChange={handleChange}
             placeholder="Photo URL (optional)"
-            className="w-full bg-gray-50 border border-gray-200 rounded-md px-3 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-green-600"
+            className="w-full bg-base-100 border border-gray-200 rounded-md px-3 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-green-600"
           />
 
           {/* Password */}
@@ -118,7 +121,7 @@ const Register = () => {
               value={form.password}
               onChange={handleChange}
               placeholder="Password"
-              className="w-full bg-gray-50 border border-gray-200 rounded-md px-3 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-green-600"
+              className="w-full bg-base-100 border border-gray-200 rounded-md px-3 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-green-600"
               required
             />
             <button
@@ -138,7 +141,7 @@ const Register = () => {
               value={form.confirmPassword}
               onChange={handleChange}
               placeholder="Confirm Password"
-              className="w-full bg-gray-50 border border-gray-200 rounded-md px-3 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-green-600"
+              className="w-full bg-base-100 border border-gray-200 rounded-md px-3 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-green-600"
               required
             />
             <button
@@ -151,11 +154,7 @@ const Register = () => {
           </div>
 
           {/* Submit */}
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition font-medium disabled:opacity-50"
-          >
+          <button type="submit" disabled={loading} className={buttonStyle}>
             {loading ? "Registering..." : "Register"}
           </button>
         </form>
@@ -181,7 +180,7 @@ const Register = () => {
           Already have an account?{" "}
           <Link
             to="/login"
-            className="text-green-600 font-semibold hover:underline"
+            className="text-green-500 font-semibold hover:underline"
           >
             Login
           </Link>

@@ -10,7 +10,9 @@ export const useTopReviews = () => {
     const fetchTopReviews = async () => {
       try {
         setLoading(true);
-        const { data } = await axios.get("http://localhost:5000/allReviews/top");
+        const { data } = await axios.get(
+          `${import.meta.env.VITE_API_URL}/allReviews/top`
+        );
         setReviews(data);
       } catch (err) {
         console.error(err);
@@ -21,6 +23,7 @@ export const useTopReviews = () => {
 
     fetchTopReviews();
   }, []);
+
 
   const isFavorite = (id) => favorites.includes(id);
 

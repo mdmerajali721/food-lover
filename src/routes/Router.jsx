@@ -1,16 +1,16 @@
 import { createBrowserRouter } from "react-router";
 import MainLayout from "../layout/MainLayout";
-import Home from "../pages/Home";
+import ErrorPage from "../pages/ErrorPage/ErrorPage";
+import Home from "../pages/Home/Home";
 import AllReviews from "../pages/AllReviews";
+import ProtectedRoute from "./ProtectedRoute";
 import AddReview from "../pages/AddReview";
 import MyReviews from "../pages/MyReviews";
 import EditReview from "../pages/EditReview";
 import MyFavorites from "../pages/MyFavorites";
-import Login from "../pages/Login";
-import Register from "../pages/Register";
-import ForgotPassword from "../pages/ForgotPassword";
-import ErrorPage from "../pages/ErrorPage";
-import ProtectedRoute from "./ProtectedRoute";
+import Login from "../pages/Auth/Login";
+import Register from "../pages/Auth/Register";
+import ForgotPassword from "../pages/Auth/ForgotPassword";
 
 const router = createBrowserRouter([
   {

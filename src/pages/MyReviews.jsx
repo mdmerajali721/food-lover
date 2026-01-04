@@ -1,23 +1,25 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import Loader from "../components/Loader";
-import Modal from "../components/Modal";
 import { useAuth } from "../context/AuthContext";
 import { toast } from "react-hot-toast";
-import {
-  AiFillStar,
-  AiOutlineHeart,
-  AiFillHeart,
-  AiOutlineClockCircle,
-} from "react-icons/ai";
+import { AiFillStar, AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { MdLocationOn } from "react-icons/md";
+import { HiOutlineClock } from "react-icons/hi";
+import Loader from "../components/Loader/Loader";
+import Modal from "../components/Modal/Modal";
+
+const buttonStyle =
+  "mx-auto w-full py-3 cursor-pointer rounded font-bold text-white bg-gradient-to-r from-green-500 to-emerald-600 hover:from-emerald-600 hover:to-green-500 shadow-md transition-all duration-300 flex justify-center items-center gap-2";
 
 const MyReviews = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [deleteModal, setDeleteModal] = useState({ open: false, reviewId: null });
+  const [deleteModal, setDeleteModal] = useState({
+    open: false,
+    reviewId: null,
+  });
   const [favorites, setFavorites] = useState({});
 
   useEffect(() => {
@@ -88,13 +90,19 @@ const MyReviews = () => {
     }
   };
 
-  if (loading) return <Loader />;
+  if (loading)
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+        <Loader />
+      </div>
+    );
+
+  const textStyle =
+    "text-3xl font-bold mb-6 text-center max-w-xs mx-auto border-b-2 border-green-500 bg-gradient-to-r from-green-500 to-emerald-600 bg-clip-text text-transparent";
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-6 text-center text-green-600">
-        My Reviews
-      </h1>
+      <h1 className={textStyle}>My Reviews</h1>
 
       {reviews.length === 0 ? (
         <p className="text-center text-gray-500">
@@ -103,56 +111,69 @@ const MyReviews = () => {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {reviews.map((review) => (
-            <div
+            <article
               key={review._id}
-              className="bg-white shadow-lg rounded-2xl overflow-hidden flex flex-col hover:shadow-2xl transition transform hover:-translate-y-1"
+              className="group relative mt-4 flex flex-col h-full cursor-pointer overflow-hidden rounded shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
             >
               {/* Image */}
-              <div className="overflow-hidden">
+              <div className="relative h-56 overflow-hidden">
                 <img
-                  src={review.foodImage || "https://i.ibb.co/KzfQRnwL/avatar.png"}
+                  src={review.foodImage}
                   alt={review.foodName}
-                  className="w-full h-56 sm:h-64 object-cover transition-transform duration-500 hover:scale-105"
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />
+
+                {/* Rating Badge */}
+                <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-md px-2 py-1 rounded-lg flex items-center gap-1 shadow-sm border border-white/20">
+                  <AiFillStar className="text-yellow-500" />
+                  <span className="text-sm font-bold text-slate-800">
+                    {review.rating}
+                  </span>
+                </div>
+
+                {/* Favorite Button */}
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleFavorite(review._id);
+                  }}
+                  className="absolute top-3 right-3 p-2 rounded-full bg-white/90 backdrop-blur-md shadow-md hover:ring-2 hover:ring-red-500 transition-all"
+                >
+                  {favorites[review._id] ? (
+                    <AiFillHeart className="text-red-500 text-xl" />
+                  ) : (
+                    <AiOutlineHeart className="text-slate-400 hover:text-red-500 text-xl transition-colors" />
+                  )}
+                </button>
               </div>
 
               {/* Content */}
-              <div className="p-5 flex flex-col flex-1">
-                <h3 className="text-xl sm:text-2xl font-semibold text-gray-800">
+              <div className="flex-1 flex flex-col p-5">
+                <h3 className="text-xl font-bold mb-1 line-clamp-1 group-hover:text-green-600 transition-colors">
                   {review.foodName}
                 </h3>
 
-                <p className="text-gray-600 flex items-center gap-1 mt-2 text-sm sm:text-base">
-                  <MdLocationOn className="text-green-600" /> {review.restaurantName}
-                  {review.restaurantLocation && ` - ${review.restaurantLocation}`}
+                <p className="flex items-center gap-1.5 text-gray-500 text-sm truncate mb-2">
+                  <MdLocationOn className="text-green-600 shrink-0" />
+                  {review.restaurantName}{" "}
+                  {review.restaurantLocation &&
+                    `- ${review.restaurantLocation}`}
                 </p>
 
-                {/* Date with icon */}
-                <p className="text-gray-500 text-sm mt-1 flex items-center gap-1">
-                  <AiOutlineClockCircle className="text-gray-400" />
-                  {new Date(review.date || review.createdAt).toLocaleDateString()}
+                <p className="flex items-center gap-1 text-gray-400 text-xs mb-4">
+                  <HiOutlineClock className="text-gray-400" />
+                  {new Date(review.createdAt).toLocaleDateString("en-GB", {
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric",
+                  })}
                 </p>
 
-                {/* Rating and Favorite */}
-                <div className="flex justify-between items-center mt-4">
-                  <div className="flex items-center gap-1 text-yellow-500">
-                    <AiFillStar /> <span>{review.rating}</span>
-                  </div>
-
-                  <button onClick={() => handleFavorite(review._id)}>
-                    {favorites[review._id] ? (
-                      <AiFillHeart className="text-red-500 text-2xl" />
-                    ) : (
-                      <AiOutlineHeart className="text-2xl hover:text-red-500 transition" />
-                    )}
-                  </button>
-                </div>
-
-                {/* Edit & Delete Buttons */}
-                <div className="flex justify-between mt-5">
+                {/* Buttons */}
+                <div className="flex justify-between gap-2 mt-auto">
                   <button
                     onClick={() => navigate(`/edit/${review._id}`)}
-                    className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
+                    className={buttonStyle + " bg-blue-600 hover:bg-blue-700"}
                   >
                     Edit
                   </button>
@@ -161,13 +182,13 @@ const MyReviews = () => {
                     onClick={() =>
                       setDeleteModal({ open: true, reviewId: review._id })
                     }
-                    className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition"
+                    className={buttonStyle + " bg-red-600 hover:bg-red-700"}
                   >
                     Delete
                   </button>
                 </div>
               </div>
-            </div>
+            </article>
           ))}
         </div>
       )}
@@ -175,21 +196,26 @@ const MyReviews = () => {
       {/* Delete Modal */}
       {deleteModal.open && (
         <Modal onClose={() => setDeleteModal({ open: false, reviewId: null })}>
-          <div className="p-6">
-            <h2 className="text-xl font-bold mb-4">Confirm Delete</h2>
-            <p className="mb-4">Are you sure you want to delete this review?</p>
+          <div className="p-6 text-center max-w-sm mx-auto">
+            <h2 className="text-2xl font-bold mb-3 text-gray-800">
+              Confirm Delete
+            </h2>
+            <p className="text-gray-600 mb-6">
+              Are you sure you want to delete this review? This action cannot be
+              undone.
+            </p>
 
-            <div className="flex justify-end gap-4">
+            <div className="flex justify-center gap-4">
               <button
-                className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
                 onClick={() => setDeleteModal({ open: false, reviewId: null })}
+                className="px-5 py-2 rounded font-bold bg-gray-300 text-gray-700 hover:bg-gray-400 transition"
               >
                 Cancel
               </button>
 
               <button
-                className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
                 onClick={() => handleDelete(deleteModal.reviewId)}
+                className="px-5 py-2 rounded bg-gradient-to-r from-red-500 to-red-600 text-white font-bold hover:from-red-600 hover:to-red-700 transition"
               >
                 Confirm
               </button>

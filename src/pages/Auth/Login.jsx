@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 import toast from "react-hot-toast";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
@@ -47,11 +47,16 @@ const Login = () => {
     }
   };
 
+  const buttonStyle =
+    "mt-auto w-full py-3 cursor-pointer rounded font-bold text-white bg-gradient-to-r from-green-500 to-emerald-600 hover:from-emerald-600 hover:to-green-500 shadow-md transition-all duration-300 flex justify-center items-center gap-2";
+  const textStyle =
+    "text-3xl font-bold mb-6 text-center max-w-xs mx-auto border-b-2 border-green-500 bg-gradient-to-r from-green-500 to-emerald-600 bg-clip-text text-transparent";    
+
   return (
-    <div className="flex justify-center items-start px-4 py-20">
+    <div className="flex justify-center items-start px-4">
       <title>Login - Food Lovers</title>
-      <div className="w-full max-w-md bg-white rounded-xl shadow-lg p-8">
-        <h1 className="text-2xl font-bold text-center text-green-600 mb-6">Log In</h1>
+      <div className="w-full max-w-md bg-base-100 rounded shadow-lg p-8">
+        <h1 className={textStyle}>Login to Food Lovers</h1>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <input
@@ -60,7 +65,7 @@ const Login = () => {
             value={email}
             name="email"
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full bg-[#FAFAFA] border border-gray-200 rounded-md px-3 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-green-600"
+            className="w-full bg-base-100 border border-gray-200 rounded-md px-3 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-green-600"
             required
           />
 
@@ -71,7 +76,7 @@ const Login = () => {
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full bg-[#FAFAFA] border border-gray-200 rounded-md px-3 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-green-600"
+              className="w-full bg-base-100 border border-gray-200 rounded-md px-3 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-green-600"
               required
             />
             <button
@@ -87,17 +92,13 @@ const Login = () => {
             <button
               type="button"
               onClick={() => navigate("/forgot-password", { state: { email } })}
-              className="text-green-600 hover:underline"
+              className="text-green-500 font-semibold hover:underline"
             >
               Forgot Password?
             </button>
           </div>
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full cursor-pointer text-white py-2 rounded-md bg-green-600 hover:bg-green-700 transition font-medium disabled:opacity-50"
-          >
+          <button type="submit" disabled={loading} className={buttonStyle}>
             {loading ? "Logging in..." : "Login"}
           </button>
         </form>
@@ -119,7 +120,10 @@ const Login = () => {
 
         <p className="mt-6 text-sm text-center text-gray-600">
           Don’t have an account?{" "}
-          <Link to="/register" className="text-blue-500 font-semibold hover:underline">
+          <Link
+            to="/register"
+            className="text-green-500 font-semibold hover:underline"
+          >
             Register
           </Link>
         </p>
