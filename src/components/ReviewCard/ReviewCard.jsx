@@ -38,7 +38,7 @@ const ReviewCard = ({ review }) => {
 
       if (res.ok) {
         setIsFavorite(true);
-        toast.success("Added to Favorites ❤️");
+        toast.success("Added to Favorites");
       } else {
         const err = await res.json();
         toast.error(err.message || "Already added");

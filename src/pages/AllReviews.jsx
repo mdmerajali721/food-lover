@@ -44,7 +44,7 @@ const AllReviews = () => {
     "text-3xl font-bold mb-6 text-center max-w-xs mx-auto border-b-2 border-green-500 bg-gradient-to-r from-green-500 to-emerald-600 bg-clip-text text-transparent";
 
   return (
-    <div className="max-w-7xl mx-auto px-4 mt-8 min-h-screen">
+    <div className="max-w-7xl px-4 mx-auto mt-8 min-h-screen">
       <h1 className={textStyle}>All Reviews</h1>
 
       {/* Search */}

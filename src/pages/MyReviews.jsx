@@ -5,7 +5,6 @@ import { toast } from "react-hot-toast";
 import { AiFillStar, AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { MdLocationOn } from "react-icons/md";
 import { HiOutlineClock } from "react-icons/hi";
-import Loader from "../components/Loader/Loader";
 import Modal from "../components/Modal/Modal";
 
 const buttonStyle =
@@ -15,7 +14,6 @@ const MyReviews = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [reviews, setReviews] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [deleteModal, setDeleteModal] = useState({
     open: false,
     reviewId: null,
@@ -33,7 +31,6 @@ const MyReviews = () => {
 
   const fetchMyReviews = async () => {
     try {
-      setLoading(true);
       const res = await fetch(
         `${import.meta.env.VITE_API_URL}/reviews?userEmail=${user.email}`
       );
@@ -43,8 +40,6 @@ const MyReviews = () => {
     } catch (err) {
       console.error(err);
       setReviews([]);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -90,18 +85,11 @@ const MyReviews = () => {
     }
   };
 
-  if (loading)
-    return (
-      <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
-        <Loader />
-      </div>
-    );
-
   const textStyle =
     "text-3xl font-bold mb-6 text-center max-w-xs mx-auto border-b-2 border-green-500 bg-gradient-to-r from-green-500 to-emerald-600 bg-clip-text text-transparent";
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8">
+    <div className="mx-auto">
       <h1 className={textStyle}>My Reviews</h1>
 
       {reviews.length === 0 ? (

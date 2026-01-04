@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, NavLink } from "react-router";
+import { Link } from "react-router";
 import logo from "/foodloverlogo.png";
 const textStyle =
   "text-2xl font-extrabold bg-gradient-to-r from-green-500 to-emerald-600 bg-clip-text text-transparent";

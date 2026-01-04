@@ -10,7 +10,7 @@ const headingStyle =
 
 const Footer = () => {
   return (
-    <footer className="mt-20 bg-base-100 border-t border-base-300">
+    <footer className="mt-8 bg-base-100 border-t border-base-300">
       {/* Main Footer */}
       <div className="max-w-7xl mx-auto px-6 py-14 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10">
         {/* Logo & Description */}

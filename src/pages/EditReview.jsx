@@ -2,14 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { toast } from "react-hot-toast";
 import { useAuth } from "../context/AuthContext";
-import Loader from "../components/Loader/Loader";
 
 const EditReview = () => {
   const { id } = useParams();
   const { user } = useAuth();
   const navigate = useNavigate();
 
-  const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({
     foodName: "",
     restaurantName: "",
@@ -46,8 +44,6 @@ const EditReview = () => {
       } catch (err) {
         console.error(err);
         toast.error("Failed to load review!");
-      } finally {
-        setLoading(false);
       }
     };
 
@@ -72,7 +68,6 @@ const EditReview = () => {
     }
 
     try {
-      setLoading(true);
       const res = await fetch(`${import.meta.env.VITE_API_URL}/reviews/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -90,20 +85,10 @@ const EditReview = () => {
     } catch (err) {
       console.error(err);
       toast.error("Something went wrong!");
-    } finally {
-      setLoading(false);
     }
   };
 
-  // Full page loader
-  if (loading)
-    return (
-      <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
-        <Loader />
-      </div>
-    );
-
-  // Styles (same as AddReview)
+  // Styles
   const textStyle =
     "text-3xl font-bold mb-6 text-center max-w-xs mx-auto border-b-2 border-green-500 bg-gradient-to-r from-green-500 to-emerald-600 bg-clip-text text-transparent";
 
@@ -111,7 +96,7 @@ const EditReview = () => {
     "w-full py-3 rounded font-bold text-white bg-gradient-to-r from-green-500 to-emerald-600 hover:from-emerald-600 hover:to-green-500 shadow-md transition-all duration-300";
 
   return (
-    <div className="max-w-2xl mx-auto p-8 mt-10 bg-base-200 shadow-2xl rounded">
+    <div className="max-w-2xl mx-auto p-8 bg-base-200 shadow-2xl rounded">
       <h2 className={textStyle}>Edit Review</h2>
 
       <form onSubmit={handleSubmit} className="space-y-4">

@@ -1,22 +1,22 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Link, NavLink } from "react-router";
+import { Link, NavLink } from "react-router"
 import { useAuth } from "../../context/AuthContext";
 import {
   RiMenuFoldFill,
   RiMenuFold2Fill,
   RiUserSharedFill,
   RiUserReceivedFill,
-  RiUserHeartFill,
-  RiUserStarFill,
 } from "react-icons/ri";
+import { GrContact } from "react-icons/gr";
+import { RiContactsBook3Line } from "react-icons/ri";
+import { FaBlogger } from "react-icons/fa6";
 import { AiOutlineHome } from "react-icons/ai";
 import { PiListStarFill } from "react-icons/pi";
+import { RxDashboard } from "react-icons/rx";
 import { toast } from "react-hot-toast";
 import "animate.css";
 import Logo from "../Logo/Logo";
 import ThemeToggle from "../ThemeToggle/ThemeToggle";
-import { FaChalkboardUser } from "react-icons/fa6";
-
 
 const Navbar = () => {
   const { user, logout } = useAuth();
@@ -38,6 +38,7 @@ const Navbar = () => {
   const handleLogout = async () => {
     try {
       await logout();
+      toast.success("Logged out successfully");
       setProfileOpen(false);
       setMenuOpen(false);
     } catch {
@@ -48,6 +49,9 @@ const Navbar = () => {
   const menuItems = [
     { to: "/", label: "Home", icon: <AiOutlineHome /> },
     { to: "/allReviews", label: "All Reviews", icon: <PiListStarFill /> },
+    { to: "/about", label: "About", icon: <GrContact /> },
+    { to: "/contact", label: "Contact", icon: <RiContactsBook3Line /> },
+    { to: "/blog", label: "Blog", icon: <FaBlogger /> },
   ];
 
   const MenuLink = ({ item, onClick, delay = 0 }) => (
@@ -56,11 +60,11 @@ const Navbar = () => {
       onClick={onClick}
       style={{ animationDelay: `${delay}ms` }}
       className={({ isActive }) =>
-        `flex items-center gap-2 px-4 py-2 font-semibold rounded transition
-        animate__animated animate__fadeInRight
+        `flex items-center gap-2 px-4 py-2 rounded font-semibold
+         animate__animated animate__fadeInRight transition-all duration-300
         ${
           isActive
-            ? " py-2 cursor-pointer rounded font-bold text-white bg-gradient-to-r from-green-500 to-emerald-600 shadow-md transition-all duration-300 flex gap-2"
+            ? "text-white bg-gradient-to-r from-green-500 to-emerald-600 shadow-md"
             : "hover:text-green-600"
         }`
       }
@@ -71,8 +75,7 @@ const Navbar = () => {
   );
 
   const buttonStyle =
-    "mx-auto px-4 py-2 cursor-pointer rounded font-bold text-white bg-gradient-to-r from-green-500 to-emerald-600 hover:from-emerald-600 hover:to-green-500 shadow-md transition-all duration-300 flex justify-center items-center gap-2";
-
+    "px-4 py-2 rounded font-bold text-white bg-gradient-to-r from-green-500 to-emerald-600 hover:from-emerald-600 hover:to-green-500 shadow-md transition-all duration-300 flex items-center gap-2";
 
   return (
     <>
@@ -88,24 +91,15 @@ const Navbar = () => {
               {menuItems.map((item) => (
                 <MenuLink key={item.to} item={item} />
               ))}
-              {user && (
-                <MenuLink
-                  item={{
-                    to: "/add-review",
-                    label: "Add Review",
-                    icon: <RiUserStarFill />,
-                  }}
-                />
-              )}
             </div>
 
             {/* Right Section */}
             <div className="flex items-center gap-3">
               <ThemeToggle />
 
-              {/* Profile */}
+              {/* Profile / Login */}
               {user ? (
-                <div className="relative" ref={profileRef}>
+                <div className="relative hidden md:block" ref={profileRef}>
                   <img
                     src={user.photoURL || "/avator.jpg"}
                     alt="User"
@@ -114,22 +108,15 @@ const Navbar = () => {
                   />
 
                   {profileOpen && (
-                    <div className="hidden md:block absolute right-0 mt-4 w-56 bg-base-200 rounded shadow-xl border border-base-300 animate__animated animate__fadeIn">
-                      
+                    <div className="absolute right-0 mt-4 w-56 bg-base-200 rounded shadow-xl animate__animated animate__fadeIn">
                       <Link
-                        to="/my-reviews"
+                        to="/dashboard"
                         onClick={() => setProfileOpen(false)}
                         className="flex items-center gap-2 px-4 py-3 hover:bg-base-300"
                       >
-                        <RiUserStarFill /> My Reviews
+                        <RxDashboard /> Dashboard
                       </Link>
-                      <Link
-                        to="/my-favorites"
-                        onClick={() => setProfileOpen(false)}
-                        className="flex items-center gap-2 px-4 py-3 hover:bg-base-300"
-                      >
-                        <RiUserHeartFill /> My Favorites
-                      </Link>
+
                       <button
                         onClick={handleLogout}
                         className="w-full text-left flex items-center gap-2 px-4 py-3 text-red-500 hover:bg-red-100"
@@ -140,7 +127,8 @@ const Navbar = () => {
                   )}
                 </div>
               ) : (
-                <Link to="/login" className={buttonStyle}>
+                /* Desktop only login */
+                <Link to="/login" className={`${buttonStyle} hidden md:flex`}>
                   <RiUserSharedFill /> Login
                 </Link>
               )}
@@ -160,14 +148,14 @@ const Navbar = () => {
       {/* BACKDROP */}
       {menuOpen && (
         <div
-          className="fixed inset-0 z-40"
+          className="fixed inset-0 z-40 bg-black/30"
           onClick={() => setMenuOpen(false)}
         />
       )}
 
       {/* Mobile Drawer */}
       <div
-        className={`md:hidden fixed top-16 right-0 h-full w-[65%] bg-base-100 shadow-2xl z-50 transition-transform duration-300 ${
+        className={`md:hidden fixed top-16 right-0 h-full w-[70%] bg-base-100 shadow-2xl z-50 transition-transform duration-300 ${
           menuOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
@@ -181,25 +169,19 @@ const Navbar = () => {
             />
           ))}
 
+          <div className="my-4 h-0.5 bg-green-500" />
+
           {user ? (
             <>
-              <div className="my-6 h-1 bg-green-500" />
               <MenuLink
                 item={{
-                  to: "/add-review",
-                  label: "Add Review",
-                  icon: <RiUserStarFill />,
+                  to: "/dashboard",
+                  label: "Dashboard",
+                  icon: <RxDashboard />,
                 }}
                 onClick={() => setMenuOpen(false)}
               />
-              <MenuLink
-                item={{
-                  to: "/my-favorites",
-                  label: "My Favorites",
-                  icon: <RiUserHeartFill />,
-                }}
-                onClick={() => setMenuOpen(false)}
-              />
+
               <button
                 onClick={handleLogout}
                 className="flex items-center gap-2 px-4 py-2 text-red-500 hover:bg-red-100 rounded"
@@ -208,6 +190,7 @@ const Navbar = () => {
               </button>
             </>
           ) : (
+            /* Mobile Login */
             <Link
               to="/login"
               onClick={() => setMenuOpen(false)}

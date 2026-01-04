@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { toast } from "react-hot-toast";
-import Loader from "../components/Loader/Loader";
 import Modal from "../components/Modal/Modal";
 import { useNavigate } from "react-router";
 
@@ -9,7 +8,6 @@ const MyFavorites = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [favorites, setFavorites] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [deleteFavId, setDeleteFavId] = useState(null);
 
   useEffect(() => {
@@ -23,7 +21,6 @@ const MyFavorites = () => {
 
   const fetchFavorites = async () => {
     try {
-      setLoading(true);
       const res = await fetch(
         `${import.meta.env.VITE_API_URL}/favorites/${user.email}`
       );
@@ -34,8 +31,6 @@ const MyFavorites = () => {
       console.error(err);
       toast.error("Unable to load favorites.");
       setFavorites([]);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -54,14 +49,11 @@ const MyFavorites = () => {
     }
   };
 
-  if (loading) return <Loader />;
-
   const textStyle =
     "text-3xl font-bold mb-6 text-center max-w-xs mx-auto border-b-2 border-green-500 bg-gradient-to-r from-green-500 to-emerald-600 bg-clip-text text-transparent";
 
-  // Fetch top reviews
   return (
-    <div className="max-w-7xl mx-auto px-4">
+    <div className="mx-auto">
       <h1 className={textStyle}>My Favorite Reviews</h1>
 
       {/* Empty State */}
@@ -76,7 +68,7 @@ const MyFavorites = () => {
           <table className="min-w-full text-sm">
             <thead className="bg-gradient-to-r from-green-100 to-emerald-100 text-green-600">
               <tr>
-                <th className="px-8 py-4 text-start  font-semibold tracking-wide">
+                <th className="px-8 py-4 text-start font-semibold tracking-wide">
                   Food
                 </th>
                 <th className="px-6 py-4 text-center font-semibold tracking-wide">
