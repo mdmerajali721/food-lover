@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router";
-import Loader from "../components/Loader/Loader";
+import Loader from "../../components/Loader/Loader";
 
 const AddReview = () => {
   const { user } = useAuth();

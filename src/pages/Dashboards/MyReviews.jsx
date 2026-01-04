@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 import { toast } from "react-hot-toast";
 import { AiFillStar, AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { MdLocationOn } from "react-icons/md";
 import { HiOutlineClock } from "react-icons/hi";
-import Modal from "../components/Modal/Modal";
+import Modal from "../../components/Modal/Modal";
 
 const buttonStyle =
   "mx-auto w-full py-3 cursor-pointer rounded font-bold text-white bg-gradient-to-r from-green-500 to-emerald-600 hover:from-emerald-600 hover:to-green-500 shadow-md transition-all duration-300 flex justify-center items-center gap-2";
@@ -121,6 +121,7 @@ const MyReviews = () => {
 
                 {/* Favorite Button */}
                 <button
+                  type="button"
                   onClick={(e) => {
                     e.stopPropagation();
                     handleFavorite(review._id);
@@ -160,13 +161,15 @@ const MyReviews = () => {
                 {/* Buttons */}
                 <div className="flex justify-between gap-2 mt-auto">
                   <button
-                    onClick={() => navigate(`/edit/${review._id}`)}
+                    type="button"
+                    onClick={() => navigate(`/dashboard/edit/${review._id}`)}
                     className={buttonStyle + " bg-blue-600 hover:bg-blue-700"}
                   >
                     Edit
                   </button>
 
                   <button
+                    type="button"
                     onClick={() =>
                       setDeleteModal({ open: true, reviewId: review._id })
                     }
@@ -195,13 +198,15 @@ const MyReviews = () => {
 
             <div className="flex justify-center gap-4">
               <button
+                type="button"
                 onClick={() => setDeleteModal({ open: false, reviewId: null })}
                 className="px-5 py-2 rounded font-bold bg-gray-300 text-gray-700 hover:bg-gray-400 transition"
               >
                 Cancel
               </button>
-
+              
               <button
+                type="button"
                 onClick={() => handleDelete(deleteModal.reviewId)}
                 className="px-5 py-2 rounded bg-gradient-to-r from-red-500 to-red-600 text-white font-bold hover:from-red-600 hover:to-red-700 transition"
               >

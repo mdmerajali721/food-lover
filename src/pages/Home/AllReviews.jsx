@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
-import ReviewCard from "../components/ReviewCard/ReviewCard";
+import ReviewCard from "../../components/ReviewCard/ReviewCard";
 
 const AllReviews = () => {
   const [reviews, setReviews] = useState([]);

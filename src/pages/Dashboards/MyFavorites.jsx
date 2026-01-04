@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 import { toast } from "react-hot-toast";
-import Modal from "../components/Modal/Modal";
+import Modal from "../../components/Modal/Modal";
 import { useNavigate } from "react-router";
 
 const MyFavorites = () => {
@@ -56,7 +56,6 @@ const MyFavorites = () => {
     <div className="mx-auto">
       <h1 className={textStyle}>My Favorite Reviews</h1>
 
-      {/* Empty State */}
       {favorites.length === 0 ? (
         <div className="text-center p-10">
           <p className="text-gray-500 text-lg">
@@ -91,7 +90,6 @@ const MyFavorites = () => {
                     key={fav._id}
                     className="border-t border-green-500 hover:bg-base-100 transition-all duration-200"
                   >
-                    {/* Food */}
                     <td className="px-6 py-4">
                       <div className="flex items-center justify-start gap-3">
                         <img
@@ -105,17 +103,14 @@ const MyFavorites = () => {
                       </div>
                     </td>
 
-                    {/* Restaurant */}
                     <td className="px-6 py-4 text-center font-medium text-gray-500">
                       {review.restaurantName || "N/A"}
                     </td>
 
-                    {/* User */}
                     <td className="px-6 py-4 text-center text-gray-500">
                       {review.userName || "Unknown"}
                     </td>
 
-                    {/* Action */}
                     <td className="px-6 py-4 text-center">
                       <button
                         onClick={() => setDeleteFavId(fav._id)}
@@ -133,7 +128,6 @@ const MyFavorites = () => {
         </div>
       )}
 
-      {/* Confirmation Modal */}
       {deleteFavId && (
         <Modal onClose={() => setDeleteFavId(null)}>
           <div className="p-6 text-center max-w-sm">

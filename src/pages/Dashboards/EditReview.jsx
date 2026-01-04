@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { toast } from "react-hot-toast";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 
 const EditReview = () => {
-  const { id } = useParams();
+  const { id } = useParams(); // fetch id from /dashboard/edit/:id
   const { user } = useAuth();
   const navigate = useNavigate();
 
@@ -17,7 +17,6 @@ const EditReview = () => {
     rating: "",
   });
 
-  // Fetch review data
   useEffect(() => {
     if (!user) {
       toast.error("Please log in first!");
@@ -50,13 +49,11 @@ const EditReview = () => {
     fetchReview();
   }, [id, user, navigate]);
 
-  // Handle change
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Submit update
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -81,14 +78,13 @@ const EditReview = () => {
       if (!res.ok) throw new Error("Update failed");
 
       toast.success("Review updated successfully!");
-      navigate("/my-reviews");
+      navigate("/dashboard/my-reviews"); // ✅ Redirect inside dashboard
     } catch (err) {
       console.error(err);
       toast.error("Something went wrong!");
     }
   };
 
-  // Styles
   const textStyle =
     "text-3xl font-bold mb-6 text-center max-w-xs mx-auto border-b-2 border-green-500 bg-gradient-to-r from-green-500 to-emerald-600 bg-clip-text text-transparent";
 
@@ -198,7 +194,7 @@ const EditReview = () => {
         <div className="flex gap-4 pt-2">
           <button
             type="button"
-            onClick={() => navigate("/my-reviews")}
+            onClick={() => navigate("/dashboard/my-reviews")} // ✅ Fixed cancel
             className="w-full py-3 rounded font-bold bg-gray-300 text-gray-700 hover:bg-gray-400 transition"
           >
             Cancel
